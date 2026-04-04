@@ -795,7 +795,8 @@ async function runScan() {
       for (const { data: p } of posts) {
         const text = ((p.title||'')+' '+(p.selftext||'')).toLowerCase();
         const matched = state.keywords.filter(k => text.includes(k.toLowerCase()));
-        if (matched.length > 0) {
+        const twelveHoursAgo = Math.floor(Date.now() / 1000) - (12 * 60 * 60);
+        if (matched.length > 0 && p.created_utc >= twelveHoursAgo) {
           scanPosts.push({
             id: p.id,
             subreddit: p.subreddit,
